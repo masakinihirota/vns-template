@@ -1,0 +1,118 @@
+{
+  // JavaScriptの実行環境を指定
+  "env": {
+    "browser": true,
+    "es2023": true,
+    "node": true
+  },
+  "root": true,
+  // 構文解析に使用するパーサーの指定
+  // デフォルトの設定ではES5しかパースできない
+  "parser": "@typescript-eslint/parser",
+  // parserのオプションを設定
+  // JSXやECMAScriptのバージョンの設定など
+  "parserOptions": {
+    // tsconfig.jsonへのパス
+    "project": "./tsconfig.json",
+    "EXPERIMENTAL_useProjectService": {
+      // 許容する最大ファイル数
+      "maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING": 30
+    },
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+
+  // 任意のルール実行時に適用される追加の共有設定
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+
+  // 追加ルールの指定
+  // pluginsにルールを指定しても、ルールは適用されていない状態
+  // 追加ルールを適用する場合は、extendsかrulesで設定が必要
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "import",
+    "unused-imports"
+  ],
+
+  // 共有設定の適用
+  // 各pluginで公開されている設定ファイルを指定することで、ルールの設定を適用
+  // ルール設定が重複する場合は、後から指定したものが適用される
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+
+  // 個別のルール設定
+  // extendsで指定した共有設定以外の個別設定
+  // 0:無効, 1:警告, 2: エラー
+  "rules": {
+    "no-case-declarations": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    // typescript-eslintのban-ts-commentルールについて
+    // https://qiita.com/KokiSakano/items/ff8dde69d7f4296e2480
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": "allow-with-description",
+        "ts-ignore": false,
+        "ts-nocheck": false,
+        "ts-check": false
+      }
+    ],
+    // TypeScriptで未使用の変数を許可するかどうかを指定します。この例では、offに設定されているため、未使用の変数を許可します。
+    "@typescript-eslint/no-unused-vars": "off",
+    // 未使用のインポートに関するルールを指定します。この例では、warnに設定されているため、未使用のインポートがある場合に警告を出します。
+    "unused-imports/no-unused-imports": "warn",
+    // モジュールのインポート順序に関するルールを指定します。この例では、配列の中に複数のグループが定義されています。各グループは、groupsプロパティで定義されています。
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          // builtin: Node.js に組み込まれているモジュール
+          // external: npm install 等 プロジェクト外部からインストールされたモジュール
+          // internal: プロジェクト内のモジュールで、パスを指定してインポートされたもの
+          // parent: 親モジュール 相対パスを使用してインポートされたもの
+          // sibling: 兄弟モジュール 相対パスを使用してインポートされたもの
+          // index: インデックスファイルで、相対パスを使用してインポートされたもの
+          // object: オブジェクトファイルで、相対パスを使用してインポートされたもの
+          // type: 型ファイルで、相対パスを使用してインポートされたもの
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "index",
+          "object",
+          "type"
+        ],
+        // それぞれのgroupsとの間は1行分空けます。
+        "newlines-between": "always",
+        // 特定のグループの import 文を除外するかどうかを指定します。
+        "pathGroupsExcludedImportTypes": ["builtin", "external"],
+        // order オプションは、アルファベット順にします。
+        // caseInsensitive オプションは、大文字小文字を無視してアルファベット順に並べるかどうかを指定します。
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "pathGroups": [
+          // pattern: インポートパスのパターンを指定します。この例では、src/ディレクトリ以下のすべてのファイルを指定しています。
+          // group: インポートパスが一致した場合に、どのグループに属するかを指定します。この例では、internalグループに属するように指定しています。
+          // position: インポートパスが一致した場合に、どの位置に挿入するかを指定します。この例では、beforeに指定しているため、他のグループよりも前に挿入されます。
+          { "pattern": "src/**", "group": "internal", "position": "before" }
+        ]
+      }
+    ]
+  }
+}

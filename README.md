@@ -1,3 +1,14 @@
+vns-template
+
+fork元が新しくなったのでtemplateを新しく作り直しました。
+
+古いものはこちら
+vns-template-first
+
+
+以下 original の README.md
+----------------------------------------
+
 # Next.js Subscription Payments Starter
 
 The all-in-one starter kit for high-performance SaaS applications.
